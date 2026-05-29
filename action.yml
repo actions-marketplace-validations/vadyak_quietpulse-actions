@@ -1,19 +1,32 @@
 name: 'QuietPulse Heartbeat'
-description: 'Send heartbeat ping to QuietPulse to monitor cron jobs and scheduled tasks'
+description: 'Monitor GitHub Actions cron jobs with QuietPulse heartbeat pings and alerts'
 author: 'Vadim <vadyakr@gmail.com>'
 
 inputs:
+  ping_url:
+    description: 'Full QuietPulse ping URL from your job settings. Recommended: store it in a GitHub Actions secret.'
+    required: false
   endpoint_token:
-    description: 'QuietPulse endpoint token (from job settings)'
-    required: true
+    description: 'QuietPulse endpoint token from the ping URL. Kept for compatibility; ping_url is recommended.'
+    required: false
   grace_period_minutes:
-    description: 'Grace period in minutes (optional, default: 5)'
+    description: 'Deprecated. Configure grace period in the QuietPulse job settings.'
     required: false
     default: '5'
   timeout_seconds:
     description: 'HTTP request timeout in seconds (optional, default: 10)'
     required: false
     default: '10'
+
+outputs:
+  status:
+    description: 'Heartbeat result: success, failed, or error.'
+  http_status:
+    description: 'HTTP status returned by QuietPulse when available.'
+  message:
+    description: 'Success message when the heartbeat is delivered.'
+  error:
+    description: 'Error details when the heartbeat fails.'
 
 runs:
   using: 'node20'
